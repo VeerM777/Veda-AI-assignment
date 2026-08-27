@@ -179,21 +179,70 @@ export default function VedaAIApp() {
   const handleStartMapping = async () => {
     setStep('extracting');
     let success = false;
+
+    /** Convert any image file to JPEG via canvas (handles HEIC, WEBP, BMP, etc.) */
+    async function normalizeImageFile(file: File): Promise<File> {
+      // PDFs stay as-is
+      if (file.type === 'application/pdf' || file.name?.toLowerCase().endsWith('.pdf')) return file;
+      // Already safe formats can skip conversion (but HEIC must be converted)
+      const unsafeTypes = ['image/heic', 'image/heif', 'image/bmp', 'image/tiff'];
+      const isUnsafe = unsafeTypes.includes(file.type?.toLowerCase()) ||
+        ['.heic', '.heif', '.bmp', '.tiff', '.tif'].some(ext => file.name?.toLowerCase().endsWith(ext));
+      if (!isUnsafe && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp')) return file;
+
+      return new Promise<File>((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth || img.width;
+            canvas.height = img.naturalHeight || img.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(img, 0, 0);
+              canvas.toBlob((blob) => {
+                URL.revokeObjectURL(url);
+                if (blob) {
+                  const jpegName = file.name.replace(/\.[^.]+$/, '.jpg') || 'image.jpg';
+                  resolve(new File([blob], jpegName, { type: 'image/jpeg' }));
+                } else {
+                  resolve(file);
+                }
+              }, 'image/jpeg', 0.92);
+            } else {
+              URL.revokeObjectURL(url);
+              resolve(file);
+            }
+          } catch {
+            URL.revokeObjectURL(url);
+            resolve(file);
+          }
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
     try {
       const fd = new FormData();
-      
-      // Append all Question Paper files IN EXACT SEQUENTIAL ORDER
-      if (questionPaper.files && questionPaper.files.length > 0) {
-        questionPaper.files.forEach((f) => fd.append('questionPaper', f));
-      } else if (questionPaper.file) {
-        fd.append('questionPaper', questionPaper.file);
+
+      // Normalize and append all Question Paper files IN EXACT SEQUENTIAL ORDER
+      const qpFiles = questionPaper.files && questionPaper.files.length > 0
+        ? questionPaper.files
+        : questionPaper.file ? [questionPaper.file] : [];
+      for (const f of qpFiles) {
+        const normalized = await normalizeImageFile(f);
+        fd.append('questionPaper', normalized);
       }
 
-      // Append all Answer Sheet files IN EXACT SEQUENTIAL ORDER
-      if (answerSheet.files && answerSheet.files.length > 0) {
-        answerSheet.files.forEach((f) => fd.append('answerSheet', f));
-      } else if (answerSheet.file) {
-        fd.append('answerSheet', answerSheet.file);
+      // Normalize and append all Answer Sheet files IN EXACT SEQUENTIAL ORDER
+      const asFiles = answerSheet.files && answerSheet.files.length > 0
+        ? answerSheet.files
+        : answerSheet.file ? [answerSheet.file] : [];
+      for (const f of asFiles) {
+        const normalized = await normalizeImageFile(f);
+        fd.append('answerSheet', normalized);
       }
 
       const res = await fetch('/api/extract', { method: 'POST', body: fd });
