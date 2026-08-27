@@ -310,10 +310,10 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
 /** Helper to execute Gemini requests with automatic exponential backoff retries & model fallbacks when under high demand (429 / 503) */
 async function callGeminiWithRetryAndFallback(ai: GoogleGenAI, contentParts: any[]) {
   const modelsToTry = [
-    'gemini-3.6-flash',
     'gemini-2.5-flash',
     'gemini-2.0-flash',
     'gemini-1.5-flash',
+    'gemini-2.5-pro',
   ];
 
   let lastError: any = null;
