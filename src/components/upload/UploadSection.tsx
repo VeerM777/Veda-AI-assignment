@@ -50,13 +50,15 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
           </p>
         </div>
 
-        {/* ── Center Teacher Hero Illustration ── */}
+        {/* ── Center Teacher Hero Circle Avatar ── */}
         <div className="flex justify-center items-center w-full my-1">
-          <img
-            src="/Teacher_holding_book_2K_202608262351.jpeg"
-            alt="Teacher Assistant"
-            className="w-36 sm:w-48 md:w-56 h-auto max-h-[140px] sm:max-h-[180px] md:max-h-[210px] object-cover rounded-2xl shadow-md border-2 border-white hover:scale-[1.02] transition-transform duration-200"
-          />
+          <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg border-4 border-white flex items-center justify-center bg-white flex-shrink-0 hover:scale-105 transition-transform duration-200">
+            <img
+              src="/Teacher_holding_book_2K_202608262351.jpeg"
+              alt="Teacher Assistant"
+              className="w-[170%] h-[170%] max-w-none object-cover scale-110"
+            />
+          </div>
         </div>
 
         {/* ── 2 Upload Cards ── */}
