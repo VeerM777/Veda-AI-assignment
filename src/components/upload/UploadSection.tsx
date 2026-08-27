@@ -50,6 +50,15 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
           </p>
         </div>
 
+        {/* ── Center Teacher Hero Illustration ── */}
+        <div className="flex justify-center items-center w-full my-1">
+          <img
+            src="/Teacher_holding_book_2K_202608262351.jpeg"
+            alt="Teacher Assistant"
+            className="w-36 sm:w-48 md:w-56 h-auto max-h-[140px] sm:max-h-[180px] md:max-h-[210px] object-cover rounded-2xl shadow-md border-2 border-white hover:scale-[1.02] transition-transform duration-200"
+          />
+        </div>
+
         {/* ── 2 Upload Cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full md:max-w-4xl px-1">
           <SequentialUploadCard
