@@ -274,16 +274,24 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
 
     /** Resolve correct MIME type from file.type or file extension fallback */
     function resolveMimeType(file: File): string {
-      if (file.type && file.type.length > 0) return file.type;
-      const name = (file.name || '').toLowerCase();
-      if (name.endsWith('.pdf')) return 'application/pdf';
-      if (name.endsWith('.png')) return 'image/png';
-      if (name.endsWith('.jpg') || name.endsWith('.jpeg')) return 'image/jpeg';
-      if (name.endsWith('.webp')) return 'image/webp';
-      if (name.endsWith('.gif')) return 'image/gif';
-      if (name.endsWith('.heic') || name.endsWith('.heif')) return 'image/heic';
-      // Default: if no extension match, try to detect from base64 header
-      return 'image/jpeg';
+      let mime = (file.type || '').toLowerCase().trim();
+      if (!mime) {
+        const name = (file.name || '').toLowerCase();
+        if (name.endsWith('.pdf')) return 'application/pdf';
+        if (name.endsWith('.png')) return 'image/png';
+        if (name.endsWith('.jpg') || name.endsWith('.jpeg')) return 'image/jpeg';
+        if (name.endsWith('.webp')) return 'image/webp';
+        if (name.endsWith('.gif')) return 'image/gif';
+        return 'image/jpeg'; // safe default
+      }
+      // Normalize non-standard iOS/browser MIME types
+      if (mime === 'image/jpg') return 'image/jpeg';
+      if (mime === 'image/heic' || mime === 'image/heif') return 'image/jpeg'; // Gemini doesn't support HEIC inlineData
+      if (mime.startsWith('image/')) {
+        const supported = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!supported.includes(mime)) return 'image/jpeg'; // fallback for unknown image types
+      }
+      return mime;
     }
 
     // Append Question Paper pages

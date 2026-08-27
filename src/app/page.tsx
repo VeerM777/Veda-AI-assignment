@@ -180,16 +180,12 @@ export default function VedaAIApp() {
     setStep('extracting');
     let success = false;
 
-    /** Convert any image file to JPEG via canvas (handles HEIC, WEBP, BMP, etc.) */
+    /** Convert ALL image files to clean JPEG via canvas — handles iOS image/jpg, image/heic, empty types, etc. */
     async function normalizeImageFile(file: File): Promise<File> {
       // PDFs stay as-is
       if (file.type === 'application/pdf' || file.name?.toLowerCase().endsWith('.pdf')) return file;
-      // Already safe formats can skip conversion (but HEIC must be converted)
-      const unsafeTypes = ['image/heic', 'image/heif', 'image/bmp', 'image/tiff'];
-      const isUnsafe = unsafeTypes.includes(file.type?.toLowerCase()) ||
-        ['.heic', '.heif', '.bmp', '.tiff', '.tif'].some(ext => file.name?.toLowerCase().endsWith(ext));
-      if (!isUnsafe && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp')) return file;
 
+      // Convert ALL images through canvas to guarantee clean image/jpeg output
       return new Promise<File>((resolve) => {
         const img = new Image();
         const url = URL.createObjectURL(file);
@@ -199,13 +195,13 @@ export default function VedaAIApp() {
             canvas.width = img.naturalWidth || img.width;
             canvas.height = img.naturalHeight || img.height;
             const ctx = canvas.getContext('2d');
-            if (ctx) {
+            if (ctx && canvas.width > 0 && canvas.height > 0) {
               ctx.drawImage(img, 0, 0);
               canvas.toBlob((blob) => {
                 URL.revokeObjectURL(url);
                 if (blob) {
-                  const jpegName = file.name.replace(/\.[^.]+$/, '.jpg') || 'image.jpg';
-                  resolve(new File([blob], jpegName, { type: 'image/jpeg' }));
+                  const baseName = (file.name || 'image').replace(/\.[^.]+$/, '');
+                  resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
                 } else {
                   resolve(file);
                 }
