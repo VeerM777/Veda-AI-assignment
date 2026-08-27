@@ -210,7 +210,12 @@ export default function VedaAIApp() {
         throw new Error(err.error || 'Extraction failed');
       }
     } catch (err: any) {
-      alert(err.message || 'An unexpected connection error occurred.');
+      let rawMsg = String(err?.message || err || '');
+      try {
+        const parsed = JSON.parse(rawMsg);
+        if (parsed?.error?.message) rawMsg = parsed.error.message;
+      } catch (e) {}
+      alert(rawMsg.includes('busy') || rawMsg.includes('demand') ? 'AI service is temporarily busy. Please click Start Mapping again.' : (rawMsg || 'Extraction service error. Please try again.'));
       setStep('upload');
     }
 
