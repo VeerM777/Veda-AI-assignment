@@ -275,11 +275,25 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
     // Construct content parts for Gemini
     const contentParts: any[] = [{ text: promptText }];
 
+    /** Resolve correct MIME type from file.type or file extension fallback */
+    function resolveMimeType(file: File): string {
+      if (file.type && file.type.length > 0) return file.type;
+      const name = (file.name || '').toLowerCase();
+      if (name.endsWith('.pdf')) return 'application/pdf';
+      if (name.endsWith('.png')) return 'image/png';
+      if (name.endsWith('.jpg') || name.endsWith('.jpeg')) return 'image/jpeg';
+      if (name.endsWith('.webp')) return 'image/webp';
+      if (name.endsWith('.gif')) return 'image/gif';
+      if (name.endsWith('.heic') || name.endsWith('.heif')) return 'image/heic';
+      // Default: if no extension match, try to detect from base64 header
+      return 'image/jpeg';
+    }
+
     // Append Question Paper pages
     questionPapers.forEach((qp, idx) => {
       contentParts.push({
         inlineData: {
-          mimeType: qp.type || 'application/pdf',
+          mimeType: resolveMimeType(qp),
           data: qpBase64List[idx],
         }
       });
@@ -289,7 +303,7 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
     answerSheets.forEach((as, idx) => {
       contentParts.push({
         inlineData: {
-          mimeType: as.type || 'application/pdf',
+          mimeType: resolveMimeType(as),
           data: asBase64List[idx],
         }
       });
