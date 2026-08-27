@@ -313,7 +313,7 @@ async function callGeminiWithRetryAndFallback(ai: GoogleGenAI, contentParts: any
     'gemini-2.5-flash',
     'gemini-2.0-flash',
     'gemini-1.5-flash',
-    'gemini-2.5-pro',
+    'gemini-1.5-pro',
   ];
 
   let lastError: any = null;
@@ -348,13 +348,13 @@ async function callGeminiWithRetryAndFallback(ai: GoogleGenAI, contentParts: any
           errString.includes('high demand') ||
           errString.includes('Quota exceeded');
 
-        if (isHighDemand) {
+        if (isHighDemand && attempt < 3) {
           const backoffMs = attempt * 1500;
           console.warn(`Gemini ${modelName} high demand / rate limit (attempt ${attempt}). Retrying in ${backoffMs}ms...`);
           await new Promise((r) => setTimeout(r, backoffMs));
         } else {
-          console.warn(`Gemini ${modelName} error: ${errString}`);
-          break;
+          console.warn(`Gemini ${modelName} error: ${errString}. Trying next fallback model...`);
+          break; // Skip to next model in modelsToTry
         }
       }
     }
