@@ -56,7 +56,7 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
             <img
               src="/Teacher_holding_book_2K_202608262351.jpeg"
               alt="Teacher Assistant"
-              className="w-[170%] h-[170%] max-w-none object-cover scale-110"
+              className="w-full h-full object-cover object-center transform scale-125 translate-y-1.5"
             />
           </div>
         </div>
