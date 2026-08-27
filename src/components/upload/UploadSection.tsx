@@ -319,7 +319,7 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
                   <span style={{
                     width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#1A1A1A',
                     color: 'white', fontSize: '11px', fontWeight: 900, display: 'flex',
-                    alignItems: 'center', justify: 'center', flexShrink: 0,
+                    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
                     {idx + 1}
                   </span>
@@ -346,14 +346,14 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
                   <button
                     onClick={() => onReorder(idx, idx + 1)}
                     disabled={idx === filesList.length - 1}
-                    style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justify: 'center', border: 'none', background: 'none', cursor: 'pointer', color: '#555', opacity: idx === filesList.length - 1 ? 0.2 : 1, padding: 0, borderRadius: '6px', flexShrink: 0 }}
+                    style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', background: 'none', cursor: 'pointer', color: '#555', opacity: idx === filesList.length - 1 ? 0.2 : 1, padding: 0, borderRadius: '6px', flexShrink: 0 }}
                     title="Move Down"
                   >
                     <ChevronDown size={14} strokeWidth={2.5} />
                   </button>
                   <button
                     onClick={() => onRemovePage(idx)}
-                    style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justify: 'center', border: 'none', background: 'none', cursor: 'pointer', color: '#DC2626', padding: 0, borderRadius: '6px', flexShrink: 0, marginLeft: '2px' }}
+                    style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', background: 'none', cursor: 'pointer', color: '#DC2626', padding: 0, borderRadius: '6px', flexShrink: 0, marginLeft: '2px' }}
                     title="Remove Page"
                   >
                     <X size={13} strokeWidth={2.5} />
@@ -366,7 +366,7 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
             <button
               onClick={() => inputRef.current?.click()}
               style={{
-                display: 'flex', alignItems: 'center', justify: 'center', gap: '6px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                 border: '2px dashed rgba(255,84,41,0.35)', borderRadius: '14px',
                 backgroundColor: 'rgba(255,240,235,0.35)', color: '#FF5429',
                 padding: '9px 0', fontSize: '13px', fontWeight: 700,
