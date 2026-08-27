@@ -1,50 +1,49 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenAI, Type } from '@google/genai';
 import { ExtractionResult } from '@/types';
 
 const extractionResponseSchema = {
-  type: Type.OBJECT,
+  type: 'OBJECT',
   properties: {
     summary: {
-      type: Type.OBJECT,
+      type: 'OBJECT',
       properties: {
-        totalQuestions: { type: Type.INTEGER },
-        totalMaxMarks: { type: Type.NUMBER },
-        totalObtainedMarks: { type: Type.NUMBER },
-        answeredCount: { type: Type.INTEGER },
-        unansweredCount: { type: Type.INTEGER },
-        outOfOrderCount: { type: Type.INTEGER },
-        percentageScore: { type: Type.NUMBER },
+        totalQuestions: { type: 'INTEGER' },
+        totalMaxMarks: { type: 'NUMBER' },
+        totalObtainedMarks: { type: 'NUMBER' },
+        answeredCount: { type: 'INTEGER' },
+        unansweredCount: { type: 'INTEGER' },
+        outOfOrderCount: { type: 'INTEGER' },
+        percentageScore: { type: 'NUMBER' },
       },
       required: ['totalQuestions', 'totalMaxMarks', 'totalObtainedMarks', 'answeredCount', 'unansweredCount'],
     },
     questions: {
-      type: Type.ARRAY,
+      type: 'ARRAY',
       items: {
-        type: Type.OBJECT,
+        type: 'OBJECT',
         properties: {
-          id: { type: Type.STRING },
-          questionNumber: { type: Type.STRING },
-          parentQuestionNumber: { type: Type.STRING },
-          questionText: { type: Type.STRING },
-          maxMarks: { type: Type.NUMBER },
-          obtainedMarks: { type: Type.NUMBER },
-          status: { type: Type.STRING },
-          aiFeedback: { type: Type.STRING },
+          id: { type: 'STRING' },
+          questionNumber: { type: 'STRING' },
+          parentQuestionNumber: { type: 'STRING' },
+          questionText: { type: 'STRING' },
+          maxMarks: { type: 'NUMBER' },
+          obtainedMarks: { type: 'NUMBER' },
+          status: { type: 'STRING' },
+          aiFeedback: { type: 'STRING' },
           answerLocations: {
-            type: Type.ARRAY,
+            type: 'ARRAY',
             items: {
-              type: Type.OBJECT,
+              type: 'OBJECT',
               properties: {
-                pageNumber: { type: Type.INTEGER },
-                label: { type: Type.STRING },
+                pageNumber: { type: 'INTEGER' },
+                label: { type: 'STRING' },
                 boundingBox: {
-                  type: Type.OBJECT,
+                  type: 'OBJECT',
                   properties: {
-                    ymin: { type: Type.INTEGER },
-                    xmin: { type: Type.INTEGER },
-                    ymax: { type: Type.INTEGER },
-                    xmax: { type: Type.INTEGER },
+                    ymin: { type: 'INTEGER' },
+                    xmin: { type: 'INTEGER' },
+                    ymax: { type: 'INTEGER' },
+                    xmax: { type: 'INTEGER' },
                   },
                   required: ['ymin', 'xmin', 'ymax', 'xmax'],
                 },
@@ -57,21 +56,21 @@ const extractionResponseSchema = {
       },
     },
     unmappedAnswers: {
-      type: Type.ARRAY,
+      type: 'ARRAY',
       items: {
-        type: Type.OBJECT,
+        type: 'OBJECT',
         properties: {
-          id: { type: Type.STRING },
-          pageNumber: { type: Type.INTEGER },
-          detectedText: { type: Type.STRING },
-          note: { type: Type.STRING },
+          id: { type: 'STRING' },
+          pageNumber: { type: 'INTEGER' },
+          detectedText: { type: 'STRING' },
+          note: { type: 'STRING' },
           boundingBox: {
-            type: Type.OBJECT,
+            type: 'OBJECT',
             properties: {
-              ymin: { type: Type.INTEGER },
-              xmin: { type: Type.INTEGER },
-              ymax: { type: Type.INTEGER },
-              xmax: { type: Type.INTEGER },
+              ymin: { type: 'INTEGER' },
+              xmin: { type: 'INTEGER' },
+              ymax: { type: 'INTEGER' },
+              xmax: { type: 'INTEGER' },
             },
             required: ['ymin', 'xmin', 'ymax', 'xmax'],
           },
@@ -222,8 +221,6 @@ ${asText}
       throw new Error('Google Gemini API Key is required for grading and mapping.');
     }
 
-    const ai = new GoogleGenAI({ apiKey: geminiKey });
-
     const promptText = `
 You are an expert Educational Evaluator, Cognitive Assessment Specialist, and Precision Answer Mapper for VedaAI Teacher's Toolkit.
 Analyze the attached Question Paper pages and Student Handwritten Answer Sheet pages.
@@ -309,7 +306,7 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
       });
     });
 
-    const jsonText = await callGeminiWithRetryAndFallback(ai, contentParts);
+    const jsonText = await callGeminiWithRetryAndFallback(geminiKey, contentParts);
     const parsedData: ExtractionResult = JSON.parse(jsonText);
     return NextResponse.json(parsedData);
   } catch (error: any) {
@@ -321,11 +318,12 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
   }
 }
 
-/** Helper to execute Gemini requests with automatic exponential backoff retries & model fallbacks when under high demand (429 / 503) */
-async function callGeminiWithRetryAndFallback(ai: GoogleGenAI, contentParts: any[]) {
+/** Helper to execute Gemini REST API calls with automatic retries & model fallbacks.
+ * Uses direct fetch to bypass @google/genai SDK model name pattern validation.
+ */
+async function callGeminiWithRetryAndFallback(apiKey: string, contentParts: any[]) {
   const modelsToTry = [
-    'models/gemini-3.6-flash',
-    'models/gemini-2.5-flash',
+    'gemini-3.6-flash',
     'gemini-2.5-flash',
   ];
 
@@ -334,41 +332,56 @@ async function callGeminiWithRetryAndFallback(ai: GoogleGenAI, contentParts: any
   for (const modelName of modelsToTry) {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
-        console.log(`Calling Gemini model ${modelName} (Attempt ${attempt})...`);
-        const response = await ai.models.generateContent({
-          model: modelName,
-          contents: [{ role: 'user', parts: contentParts }],
-          config: {
-            responseMimeType: 'application/json',
-            responseSchema: extractionResponseSchema,
-            temperature: 0.1,
-          },
+        console.log(`Calling Gemini REST API model ${modelName} (Attempt ${attempt})...`);
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: contentParts }],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              responseSchema: extractionResponseSchema,
+              temperature: 0.1,
+            },
+          }),
         });
 
-        const jsonText = response.text;
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({ error: { message: `HTTP ${res.status}` } }));
+          const errMsg = errBody?.error?.message || `HTTP ${res.status}`;
+          const isHighDemand = res.status === 429 || res.status === 503 || errMsg.includes('RESOURCE_EXHAUSTED');
+          const isDeprecated = res.status === 404 || errMsg.includes('no longer available') || errMsg.includes('NOT_FOUND');
+
+          if (isDeprecated) {
+            console.warn(`Gemini ${modelName} deprecated/unavailable: ${errMsg}. Trying next model...`);
+            lastError = new Error(errMsg);
+            break; // try next model
+          } else if (isHighDemand && attempt < 3) {
+            const backoffMs = attempt * 1500;
+            console.warn(`Gemini ${modelName} rate limited (attempt ${attempt}). Retrying in ${backoffMs}ms...`);
+            await new Promise((r) => setTimeout(r, backoffMs));
+          } else {
+            lastError = new Error(errMsg);
+            break;
+          }
+          continue;
+        }
+
+        const data = await res.json();
+        const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (jsonText && jsonText.trim().length > 0) {
           console.log(`Successfully generated extraction using ${modelName}`);
           return jsonText;
         }
+        throw new Error('Empty response from Gemini API');
+
       } catch (err: any) {
         lastError = err;
         const errString = String(err?.message || err);
-        const isHighDemand =
-          errString.includes('429') ||
-          errString.includes('503') ||
-          errString.includes('RESOURCE_EXHAUSTED') ||
-          errString.includes('overloaded') ||
-          errString.includes('high demand') ||
-          errString.includes('Quota exceeded');
-
-        if (isHighDemand && attempt < 3) {
-          const backoffMs = attempt * 1500;
-          console.warn(`Gemini ${modelName} high demand / rate limit (attempt ${attempt}). Retrying in ${backoffMs}ms...`);
-          await new Promise((r) => setTimeout(r, backoffMs));
-        } else {
-          console.warn(`Gemini ${modelName} error: ${errString}. Trying next fallback model...`);
-          break; // Skip to next model in modelsToTry
-        }
+        console.warn(`Gemini ${modelName} error: ${errString}. Trying next model...`);
+        break;
       }
     }
   }
