@@ -32,10 +32,12 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
 
   return (
     <div
-      className="h-full overflow-y-auto flex flex-col items-center justify-start md:justify-center px-3 md:px-8 py-8 md:py-16"
+      className="h-full overflow-y-auto no-scrollbar flex flex-col items-center justify-start md:justify-center px-3 md:px-8 py-8 md:py-16"
       style={{
         fontFamily: "'Bricolage Grotesque', sans-serif",
         background: 'transparent',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
       }}
     >
       <div className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-9 animate-fade-up my-auto">

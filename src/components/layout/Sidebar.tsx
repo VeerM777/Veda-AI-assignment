@@ -62,7 +62,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           boxShadow: collapsed ? 'none' : '0 20px 50px rgba(0, 0, 0, 0.12), 0 10px 20px rgba(0, 0, 0, 0.08)',
         }}
       >
-        <div className={`flex flex-col h-full pt-6 pb-8 overflow-y-auto ${collapsed ? 'px-3.5' : 'px-6'}`}>
+        <div
+          className={`flex flex-col h-full pt-6 pb-8 overflow-y-auto no-scrollbar ${collapsed ? 'px-3.5' : 'px-6'}`}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
 
           {/* ── Logo Row ── */}
           <div 
