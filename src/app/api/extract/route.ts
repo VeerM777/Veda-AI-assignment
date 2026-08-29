@@ -84,7 +84,7 @@ const extractionResponseSchema = {
 
 /** Helper to try Groq Vision models */
 async function callGroqOCR(groqKey: string, base64Data: string, mimeType: string, promptText: string): Promise<string> {
-  const modelsToTry = ['qwen/qwen3.8-27b', 'qwen/qwen3.6-27b'];
+  const modelsToTry = ['llama-3.2-11b-vision-preview', 'llama-3.2-90b-vision-preview'];
 
   for (const model of modelsToTry) {
     try {

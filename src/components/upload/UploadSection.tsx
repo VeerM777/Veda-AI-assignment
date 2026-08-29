@@ -180,7 +180,7 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,image/*"
+        accept="application/pdf,image/jpeg,image/png,image/heic,image/heif,image/*"
         multiple={!isPDF}
         className="hidden"
         onChange={(e) => {

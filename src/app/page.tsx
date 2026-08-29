@@ -180,7 +180,7 @@ export default function VedaAIApp() {
     setStep('extracting');
     let success = false;
 
-    /** Convert ALL image files safely to clean JPEG via FileReader + Canvas (handles iOS image/jpg, HEIC, empty types) */
+    /** Convert & Compress ALL image files to clean JPEG via FileReader + Canvas (max 1600px dimension, ~250KB size) */
     async function normalizeImageFile(file: File): Promise<File> {
       // PDFs stay as-is
       if (!file || file.type === 'application/pdf' || (file.name || '').toLowerCase().endsWith('.pdf')) {
@@ -196,17 +196,34 @@ export default function VedaAIApp() {
           reader.readAsDataURL(file);
         });
 
-        // Try converting image to standard JPEG via Canvas
+        // Convert & scale image to standard JPEG via Canvas
         return await new Promise<File>((resolve) => {
           const img = new Image();
           img.onload = () => {
             try {
+              const MAX_DIM = 1600;
+              let width = img.naturalWidth || img.width || 1200;
+              let height = img.naturalHeight || img.height || 1200;
+
+              // Scale down large camera photos (e.g. 4032x3024 iPhone photos)
+              if (width > MAX_DIM || height > MAX_DIM) {
+                if (width > height) {
+                  height = Math.round((height * MAX_DIM) / width);
+                  width = MAX_DIM;
+                } else {
+                  width = Math.round((width * MAX_DIM) / height);
+                  height = MAX_DIM;
+                }
+              }
+
               const canvas = document.createElement('canvas');
-              canvas.width = img.naturalWidth || img.width || 800;
-              canvas.height = img.naturalHeight || img.height || 600;
+              canvas.width = width;
+              canvas.height = height;
               const ctx = canvas.getContext('2d');
-              if (ctx && canvas.width > 0 && canvas.height > 0) {
-                ctx.drawImage(img, 0, 0);
+              if (ctx && width > 0 && height > 0) {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, width, height); // White canvas background
+                ctx.drawImage(img, 0, 0, width, height);
                 canvas.toBlob((blob) => {
                   if (blob) {
                     const baseName = (file.name || 'image').replace(/\.[^.]+$/, '');
@@ -214,7 +231,7 @@ export default function VedaAIApp() {
                   } else {
                     resolve(file);
                   }
-                }, 'image/jpeg', 0.88);
+                }, 'image/jpeg', 0.80);
               } else {
                 resolve(file);
               }
@@ -222,7 +239,7 @@ export default function VedaAIApp() {
               resolve(file);
             }
           };
-          img.onerror = () => resolve(file); // Safe fallback to original file if canvas drawing fails
+          img.onerror = () => resolve(file); // Safe fallback to original file if canvas loading fails
           img.src = dataUrl;
         });
       } catch {
