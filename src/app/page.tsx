@@ -405,12 +405,11 @@ export default function VedaAIApp() {
               {/* LEFT PANEL — Questions list */}
               <div
                 className={`
-                  min-h-0 flex flex-col bg-white rounded-3xl
+                  flex-1 min-h-0 flex flex-col bg-white rounded-3xl
                   border border-black/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.03)]
-                  overflow-hidden md:w-[42%] md:min-w-[280px] md:max-w-[440px]
+                  overflow-hidden w-full md:w-[42%] md:min-w-[280px] md:max-w-[440px]
                   ${mobileTab === 'answerSheet' ? 'hidden md:flex' : 'flex'}
                 `}
-                style={{ flexShrink: 0 }}
               >
                 <QuestionList
                   questions={result.questions}
