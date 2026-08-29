@@ -93,25 +93,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
               )}
             </div>
 
-            {/* Desktop Collapse Toggle / Mobile Close button */}
+            {/* Sidebar Close / Collapse Toggle button */}
             {!collapsed && (
-              <div className="flex items-center gap-1 ml-auto">
+              <div className="flex items-center ml-auto">
                 <button
-                  onClick={onToggleCollapse}
-                  title="Collapse Sidebar"
+                  onClick={() => {
+                    if (mobileOpen && onCloseMobile) {
+                      onCloseMobile();
+                    } else {
+                      onToggleCollapse();
+                    }
+                  }}
+                  title="Close Sidebar"
                   className="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0"
                 >
                   <PanelLeftClose size={20} strokeWidth={1.8} />
                 </button>
-                {onCloseMobile && (
-                  <button
-                    onClick={onCloseMobile}
-                    title="Close Sidebar"
-                    className="md:hidden p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0"
-                  >
-                    <X size={20} strokeWidth={2} />
-                  </button>
-                )}
               </div>
             )}
           </div>

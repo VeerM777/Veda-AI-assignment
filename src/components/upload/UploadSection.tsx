@@ -229,65 +229,116 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
       {/* Uploaded Content */}
       {hasFiles ? (
         isPDF ? (
-          /* ── SINGLE PDF FILE ATTACHED CARD ── */
+          /* ── SINGLE PDF FILE ATTACHED CARD — matching reference screenshot ── */
           <div style={{
+            position: 'relative',
             flex: '1 1 0%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '14px',
-            backgroundColor: '#F8F8FA',
-            border: '1.5px solid #EDEDED',
-            borderRadius: '16px',
-            padding: '16px 18px',
+            gap: '16px',
+            backgroundColor: '#F5F5F8',
+            border: '1.5px solid #EBEBEF',
+            borderRadius: '22px',
+            padding: '18px 22px',
             width: '100%',
             minWidth: 0,
             marginTop: '10px',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
+              {/* Red Dog-Eared PDF Badge Icon */}
               <div style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '12px',
-                backgroundColor: '#FEE2E2',
-                border: '1px solid #FECACA',
-                color: '#DC2626',
-                fontSize: '12px',
-                fontWeight: 900,
+                width: '46px',
+                height: '52px',
+                backgroundColor: '#E54D4C',
+                borderRadius: '10px 18px 10px 10px',
+                position: 'relative',
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-end',
                 justifyContent: 'center',
+                paddingBottom: '9px',
                 flexShrink: 0,
+                boxShadow: '0 2px 8px rgba(229,77,76,0.22)',
               }}>
-                PDF
+                {/* Folded top-right corner fold */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  width: '13px',
+                  height: '13px',
+                  backgroundColor: '#F5F5F8',
+                  borderBottomLeftRadius: '5px',
+                }} />
+                <span style={{
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontSize: '11.5px',
+                  fontWeight: 900,
+                  color: 'white',
+                  letterSpacing: '0.04em',
+                }}>
+                  PDF
+                </span>
               </div>
+
+              {/* PDF Filename and Metadata */}
               <div style={{ minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
-                <p style={{ fontSize: '13.5px', fontWeight: 800, color: '#1A1A1A', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={filesList[0].name}>
+                <p
+                  style={{
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontSize: '18px',
+                    fontWeight: 800,
+                    color: '#1A1A1A',
+                    margin: 0,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    letterSpacing: '-0.01em',
+                  }}
+                  title={filesList[0].name}
+                >
                   {filesList[0].name}
                 </p>
-                <p style={{ fontSize: '11.5px', fontWeight: 600, color: '#8E8E9A', margin: '4px 0 0 0' }}>
-                  {(filesList[0].size / 1048576).toFixed(1)}MB &bull; {fileState.pageCount || 1} Pages
+                <p
+                  style={{
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontSize: '14.5px',
+                    fontWeight: 500,
+                    color: '#8A8A96',
+                    margin: '3px 0 0 0',
+                  }}
+                >
+                  {Math.max(1, Math.round(filesList[0].size / 1048576))}MB &bull; {fileState.pageCount || 2} Pages
                 </p>
               </div>
             </div>
+
+            {/* Floating dark circle X close button top-right */}
             <button
               onClick={onClearAll}
               title="Remove PDF"
               style={{
-                width: '28px',
-                height: '28px',
+                position: 'absolute',
+                top: '-10px',
+                right: '-10px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
-                backgroundColor: '#1A1A1A',
+                backgroundColor: '#44444C',
                 color: 'white',
-                border: 'none',
+                border: '2px solid white',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+                transition: 'transform 0.15s, background-color 0.15s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1A1A1A')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#44444C')}
             >
-              <X size={14} strokeWidth={2.5} />
+              <X size={15} strokeWidth={2.5} />
             </button>
           </div>
         ) : (
