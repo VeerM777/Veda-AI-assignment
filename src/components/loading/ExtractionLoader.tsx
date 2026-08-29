@@ -19,7 +19,7 @@ export const ExtractionLoader: React.FC = () => (
       </div>
 
       <div className="text-center space-y-1">
-        <h2 className="text-[24px] font-black text-[#1A1A1A] tracking-tight">Extracting...</h2>
+        <h2 style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }} className="text-[24px] font-black text-[#1A1A1A] tracking-tight">Extracting...</h2>
         <p className="text-[14px] text-[#9B9B9B] font-medium">This may take a while</p>
       </div>
 
