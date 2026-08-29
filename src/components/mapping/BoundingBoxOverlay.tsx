@@ -24,24 +24,32 @@ export const BoundingBoxOverlay: React.FC<BoundingBoxOverlayProps> = ({
     });
   });
 
+  const activeQuestion = questions.find(q => q.id === activeQuestionId);
+  const activeNumber = activeQuestion?.questionNumber || activeQuestion?.parentQuestionNumber;
+
   return (
     <div className="absolute inset-0 pointer-events-none z-10">
       {items.map(({ question, location }) => {
-        const isActive = question.id === activeQuestionId;
+        // Unified active matching: match by exact id or question number so all pages of the same question highlight identically
+        const isSameQuestion =
+          question.id === activeQuestionId ||
+          (activeNumber && (question.questionNumber === activeNumber || question.parentQuestionNumber === activeNumber));
+
+        const isActive = isSameQuestion;
         const b = location.boundingBox;
         const full = question.obtainedMarks === question.maxMarks && question.maxMarks > 0;
         const zero = question.obtainedMarks === 0;
 
-        // Base status color — constant across all pages for the same question
+        // Base status color — 100% constant across all pages for the same question
         const baseColor = full ? '#22C55E' : zero ? '#EF4444' : '#F59E0B';
         const borderColor = isActive ? '#FF5429' : baseColor;
         const bgColor = isActive
-          ? 'rgba(255,84,41,0.08)'
+          ? 'rgba(255,84,41,0.12)'
           : full
-          ? 'rgba(34,197,94,0.06)'
+          ? 'rgba(34,197,94,0.08)'
           : zero
-          ? 'rgba(239,68,68,0.06)'
-          : 'rgba(245,158,11,0.06)';
+          ? 'rgba(239,68,68,0.08)'
+          : 'rgba(245,158,11,0.08)';
         const badgeBg = isActive ? '#FF5429' : baseColor;
 
         return (

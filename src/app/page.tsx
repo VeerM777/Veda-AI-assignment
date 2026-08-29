@@ -306,6 +306,8 @@ export default function VedaAIApp() {
     if (q?.answerLocations[0]) {
       setCurrentPage(q.answerLocations[0].pageNumber);
     }
+    // Automatically switch mobile view to answerSheet tab so user sees bounding box highlight
+    setMobileTab('answerSheet');
   };
 
   return (

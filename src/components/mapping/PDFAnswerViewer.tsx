@@ -329,7 +329,15 @@ export const PDFAnswerViewer: React.FC<PDFAnswerViewerProps> = ({
           )}
 
           {!pdfRendering && displayUrl && (
-            <>
+            <div
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                lineHeight: 0,
+              }}
+            >
               <img
                 src={displayUrl}
                 alt={`Answer Sheet Page ${currentPage}`}
@@ -342,14 +350,14 @@ export const PDFAnswerViewer: React.FC<PDFAnswerViewerProps> = ({
                   display: 'block',
                 }}
               />
-              {/* Bounding box overlay positioned over the image */}
+              {/* Bounding box overlay positioned precisely over the image */}
               <BoundingBoxOverlay
                 questions={questions}
                 activeQuestionId={activeQuestionId}
                 currentPage={currentPage}
                 onSelectQuestion={onSelectQuestion}
               />
-            </>
+            </div>
           )}
 
           {!pdfRendering && !displayUrl && (
