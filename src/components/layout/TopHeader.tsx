@@ -16,7 +16,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   return (
     <header
       className="h-[64px] bg-white rounded-3xl border border-black/[0.05] shadow-[0_2px_12px_rgba(0,0,0,0.03)] px-6 flex items-center justify-between flex-shrink-0 select-none"
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
     >
       {/* ── Left side: title + back button ──────────────── */}
       <div className="flex items-center gap-3" style={{ paddingLeft: '28px' }}>

@@ -36,17 +36,17 @@ export default function VedaAIApp() {
   const [activeQ, setActiveQ]         = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [padding, setPadding] = useState('24px');
-  const [gap, setGap] = useState('20px');
+  const [padding, setPadding] = useState('12px');
+  const [gap, setGap] = useState('12px');
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
+        setPadding('8px');
+        setGap('8px');
+      } else {
         setPadding('12px');
         setGap('12px');
-      } else {
-        setPadding('24px');
-        setGap('20px');
       }
     };
     handleResize();
@@ -317,7 +317,10 @@ export default function VedaAIApp() {
       height: '100vh',
       width: '100vw',
       overflow: 'hidden',
-      backgroundColor: '#EBEBF0',
+      padding: padding,
+      background: step === 'upload'
+        ? 'linear-gradient(180deg, #F4F4F4 0%, #ECEBEB 45%, #DFDDDD 72%, #C4C1C1 100%)'
+        : '#EBEBF0',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
     }}>
       {/* ── Sidebar ── */}
@@ -339,7 +342,9 @@ export default function VedaAIApp() {
         overflow: 'hidden',
         padding: padding,
         gap: gap,
-        backgroundColor: '#EBEBF0',
+        background: step === 'upload'
+          ? 'transparent'
+          : '#EBEBF0',
       }}>
         <TopHeader
           showBack={step === 'dashboard'}

@@ -32,37 +32,43 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
 
   return (
     <div
-      className="h-full overflow-y-auto flex flex-col items-center justify-start px-3 md:px-8 py-4 md:py-8 bg-[#EBEBF0]"
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+      className="h-full overflow-y-auto flex flex-col items-center justify-start md:justify-center px-3 md:px-8 py-8 md:py-16"
+      style={{
+        fontFamily: "'Bricolage Grotesque', sans-serif",
+        background: 'transparent',
+      }}
     >
-      <div className="w-full max-w-5xl flex flex-col items-center gap-5 md:gap-8 animate-fade-up">
+      <div className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-9 animate-fade-up my-auto">
 
         {/* ── Main Title Heading ── */}
-        <div className="text-center space-y-2 w-full px-2">
+        <div className="text-center w-full px-2">
           <h1
             style={{ fontFamily: "'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif" }}
-            className="text-[20px] sm:text-[28px] md:text-[36px] lg:text-[40px] font-black text-[#1A1A1A] leading-tight flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 tracking-tight"
+            className="text-[24px] sm:text-[34px] md:text-[44px] lg:text-[50px] font-bold text-[#1A1A1A] leading-tight flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3.5 tracking-tight"
           >
-            <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>Upload</span>
+            <span style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700 }}>Upload</span>
             <span
-              style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
-              className="inline-block bg-[#FFF0EB] text-[#FF5429] px-4 md:px-7 py-1.5 md:py-2.5 rounded-2xl border border-[#FED3C8] font-black shadow-xs text-center max-w-[95vw] md:max-w-none text-[16px] sm:text-[24px] md:text-[36px] lg:text-[40px]"
+              style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700 }}
+              className="inline-block bg-[#F5E4DA] text-[#FF5429] px-5 md:px-8 py-2 md:py-3 rounded-2xl border border-[#F7C6B6] shadow-xs text-center max-w-[95vw] md:max-w-none text-[20px] sm:text-[30px] md:text-[42px] lg:text-[48px]"
             >
               Question Paper &amp; Answer Sheets
             </span>
           </h1>
-          <p className="text-[13px] md:text-[16px] text-[#6E6E7C] font-semibold">
-            Upload PDF document or image pages in sequence
+          <p
+            className="text-[17px] sm:text-[19px] md:text-[21px] text-[#2D2D36] tracking-tight"
+            style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 400, marginTop: '10px' }}
+          >
+            Upload both files to get started
           </p>
         </div>
 
-        {/* ── Center Teacher Hero Circle Avatar ── */}
-        <div className="flex justify-center items-center w-full my-1">
-          <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg border-4 border-white flex items-center justify-center bg-white flex-shrink-0 hover:scale-105 transition-transform duration-200">
+        {/* ── Center Teacher Hero Circle Avatar with Floating Icons ── */}
+        <div className="flex justify-center items-center w-full mt-2 mb-1">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 flex items-center justify-center flex-shrink-0 hover:scale-105 transition-transform duration-200">
             <img
-              src="/Teacher_holding_book_2K_202608262351.jpeg"
+              src="/teacher_hero_graphic_transparent.png"
               alt="Teacher Assistant"
-              className="w-full h-full object-cover object-center transform scale-125 translate-y-1.5"
+              className="w-full h-full object-contain drop-shadow-xs"
             />
           </div>
         </div>
@@ -90,46 +96,35 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
         </div>
 
         {/* ── Start Mapping CTA & Demo Load ── */}
-        <div className="flex flex-col items-center gap-3 pt-1 w-full px-4">
+        <div className="flex flex-col items-center gap-3 pt-6 sm:pt-8 md:pt-10 w-full px-4 mt-2">
           <button
             onClick={onStartMapping}
             disabled={!canStart}
             style={{
+              fontFamily: "'Bricolage Grotesque', sans-serif",
               paddingLeft: '32px',
               paddingRight: '32px',
-              paddingTop: '14px',
-              paddingBottom: '14px',
+              paddingTop: '12px',
+              paddingBottom: '12px',
               whiteSpace: 'nowrap',
               minWidth: 'max-content'
             }}
-            className={`flex items-center justify-center gap-3 rounded-full text-[15px] md:text-[16.5px] font-extrabold transition-all select-none flex-shrink-0 w-full sm:w-auto
+            className={`flex items-center justify-center gap-2.5 rounded-full text-[16px] md:text-[17px] font-semibold transition-all select-none flex-shrink-0 w-full sm:w-auto
               ${canStart
                 ? 'bg-[#1A1A1A] text-white hover:bg-black cursor-pointer shadow-lg hover:scale-[1.02]'
-                : 'bg-[#C2C2CB] text-white cursor-not-allowed shadow-none'
+                : 'bg-[#9E9E9E] text-[#E0E0E6] cursor-not-allowed shadow-none'
               }`}
           >
             <span>Start Mapping</span>
-            <ArrowRight size={18} strokeWidth={2.5} />
+            <ArrowRight size={18} strokeWidth={2} className={canStart ? 'text-white' : 'text-[#E0E0E6]'} />
           </button>
 
-          <p className="text-[12px] md:text-[13.5px] text-[#787885] font-medium text-center">
-            Once both files are attached, click Start Mapping
-          </p>
-
-          <button
-            onClick={onLoadDemoFiles}
-            style={{
-              paddingLeft: '20px',
-              paddingRight: '20px',
-              paddingTop: '10px',
-              paddingBottom: '10px',
-              whiteSpace: 'nowrap',
-              minWidth: 'max-content'
-            }}
-            className="flex items-center gap-2 text-[13.5px] font-bold text-[#FF5429] hover:text-[#E04520] bg-white hover:bg-[#FFF0EB] rounded-full border border-[#FED3C8] shadow-xs transition-all cursor-pointer mt-1"
+          <p
+            style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
+            className="text-[15px] sm:text-[16.5px] md:text-[17.5px] text-[#6A6A76] font-normal text-center mt-1 tracking-tight"
           >
-            <span>Load Demo Files</span>
-          </button>
+            Once both files are uploaded, you'll able to map answers with questions
+          </p>
         </div>
 
       </div>
@@ -168,18 +163,18 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
       onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onDrop={handleDrop}
       style={{
-        borderRadius: '20px',
-        border: hasFiles ? '2px solid rgba(255,84,41,0.3)' : '2px dashed #E0E0E8',
+        borderRadius: '24px',
+        border: hasFiles ? '2px solid rgba(255,84,41,0.3)' : '2px dashed #C8C8D4',
         backgroundColor: 'white',
-        height: '260px',
-        maxHeight: '260px',
+        height: '235px',
+        maxHeight: '235px',
         display: 'flex',
         flexDirection: 'column',
-        padding: '20px 22px',
+        padding: '16px 20px',
         width: '100%',
         minWidth: 0,
         overflow: 'hidden',
-        boxShadow: hasFiles ? '0 4px 12px rgba(0,0,0,0.05)' : '0 1px 3px rgba(0,0,0,0.03)',
+        boxShadow: hasFiles ? '0 4px 12px rgba(0,0,0,0.05)' : '0 2px 6px rgba(0,0,0,0.02)',
         transition: 'border-color 0.2s, box-shadow 0.2s',
       }}
     >
@@ -197,29 +192,27 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
         }}
       />
 
-      {/* Card Header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '8px',
-        paddingBottom: '10px',
-        borderBottom: '1px solid #F0F0F2',
-        marginBottom: '12px',
-        width: '100%',
-        minWidth: 0,
-        flexShrink: 0,
-        overflow: 'hidden',
-      }}>
-        <div style={{ minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#1A1A1A', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</h3>
-          <p style={{ fontSize: '11.5px', fontWeight: 600, color: '#8E8E9A', margin: '2px 0 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {hasFiles 
-              ? isPDF ? 'PDF Document Attached' : `${filesList.length} Image Page${filesList.length > 1 ? 's' : ''} in Sequence` 
-              : 'PDF or Images'}
-          </p>
-        </div>
-        {hasFiles && (
+      {/* Card Header — shown only when files are attached */}
+      {hasFiles && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
+          paddingBottom: '10px',
+          borderBottom: '1px solid #F0F0F2',
+          marginBottom: '12px',
+          width: '100%',
+          minWidth: 0,
+          flexShrink: 0,
+          overflow: 'hidden',
+        }}>
+          <div style={{ minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
+            <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '16px', fontWeight: 800, color: '#1A1A1A', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</h3>
+            <p style={{ fontSize: '11.5px', fontWeight: 600, color: '#8E8E9A', margin: '2px 0 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {isPDF ? 'PDF Document Attached' : `${filesList.length} Image Page${filesList.length > 1 ? 's' : ''} in Sequence`}
+            </p>
+          </div>
           <button
             onClick={onClearAll}
             style={{
@@ -230,8 +223,8 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
           >
             Clear All
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Uploaded Content */}
       {hasFiles ? (
@@ -398,22 +391,24 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
           </div>
         )
       ) : (
-        /* Empty Dropzone State */
+        /* Empty Dropzone State — matches Image 2 design exactly */
         <div
           onClick={() => inputRef.current?.click()}
           style={{
             flex: '1 1 0%', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: '8px',
-            textAlign: 'center', cursor: 'pointer', padding: '24px 0',
+            alignItems: 'center', justifyContent: 'center', gap: '10px',
+            textAlign: 'center', cursor: 'pointer', padding: '12px 0',
           }}
         >
-          <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: '#F4F4F8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Upload className="w-5 h-5 text-[#555562]" strokeWidth={1.8} />
+          <div style={{ width: '52px', height: '52px', borderRadius: '16px', backgroundColor: '#F4F4F8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2px' }}>
+            <Upload className="w-6 h-6 text-[#1A1A1A]" strokeWidth={2.2} />
           </div>
-          <p style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '14px', fontWeight: 800, color: '#1A1A1A', margin: 0 }}>
-            Upload <span style={{ color: '#FF5429' }}>{label}</span>
+          <p style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '23.5px', fontWeight: 700, color: '#1A1A1A', margin: 0, letterSpacing: '-0.02em' }}>
+            Upload <span style={{ color: '#FF5429', fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700 }}>{label}</span>
           </p>
-          <p style={{ fontSize: '11.5px', fontWeight: 600, color: '#9898A6', margin: 0 }}>Click or drop PDF or images to begin</p>
+          <p style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: '13.5px', fontWeight: 500, color: '#8E8E9A', margin: 0 }}>
+            Max 10MB
+          </p>
         </div>
       )}
     </div>

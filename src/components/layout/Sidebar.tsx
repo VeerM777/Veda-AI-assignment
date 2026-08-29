@@ -2,7 +2,7 @@
 import React from 'react';
 import {
   LayoutGrid, GraduationCap, FileText,
-  ClipboardList, History, Settings, ChevronRight, ChevronLeft,
+  ClipboardList, History, Settings, ChevronRight, ChevronsRight, PanelLeftClose,
   Sparkles, X,
 } from 'lucide-react';
 
@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         style={{
           width: collapsed ? '76px' : (mobileOpen ? '280px' : '320px'), // 280px on mobile to fit screen perfectly
           minWidth: collapsed ? '76px' : (mobileOpen ? '280px' : '320px'),
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontFamily: "'Bricolage Grotesque', sans-serif",
           marginLeft: '0px',
           boxShadow: collapsed ? 'none' : '0 20px 50px rgba(0, 0, 0, 0.12), 0 10px 20px rgba(0, 0, 0, 0.08)',
         }}
@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   title="Collapse Sidebar"
                   className="p-1.5 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0"
                 >
-                  <ChevronLeft size={20} strokeWidth={2} />
+                  <PanelLeftClose size={20} strokeWidth={1.8} />
                 </button>
                 {onCloseMobile && (
                   <button
@@ -117,22 +117,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* ── AI Teacher's Toolkit Button ── */}
-          {/* Locked spacing style to prevent compression */}
-          <div className="flex-shrink-0 flex justify-center w-full" style={{ marginBottom: '42px' }}>
+          {/* ── AI Teacher's Toolkit Button ── */}
+          <div className="flex-shrink-0 flex justify-center w-full" style={{ marginBottom: '36px' }}>
             {collapsed ? (
               <button
                 onClick={() => onSelectNav('exams')}
                 title="AI Teacher's Toolkit"
-                className="w-12 h-12 rounded-2xl bg-[#18181B] border border-[#FF5429] flex items-center justify-center text-white hover:opacity-90 transition-opacity cursor-pointer shadow-sm flex-shrink-0"
+                className="w-12 h-12 rounded-full bg-[#242427] border-[3.5px] border-[#FF5429] flex items-center justify-center text-white hover:opacity-90 transition-opacity cursor-pointer shadow-md flex-shrink-0"
               >
-                <Sparkles size={18} fill="white" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="flex-shrink-0">
+                  <path d="M 10 3 Q 10 12 19 12 Q 10 12 10 21 Q 10 12 1 12 Q 10 12 10 3 Z" />
+                  <path d="M 18 1 Q 18 5 22 5 Q 18 5 18 9 Q 18 5 14 5 Q 18 5 18 1 Z" />
+                </svg>
               </button>
             ) : (
               <button
                 onClick={() => onSelectNav('exams')}
-                className="w-[218px] h-[50px] flex items-center justify-center gap-3 px-4 rounded-2xl bg-[#18181B] text-white text-[14.5px] font-bold border border-[#FF5429] ring-2 ring-[#FF5429]/15 hover:opacity-95 transition-all cursor-pointer shadow-md flex-shrink-0"
+                className="w-full max-w-[268px] h-[52px] flex items-center justify-center gap-2.5 px-6 rounded-full text-white text-[14.5px] font-semibold hover:opacity-95 transition-all cursor-pointer shadow-md flex-shrink-0"
+                style={{
+                  background: 'linear-gradient(180deg, #323235 0%, #1A1A1C 100%)',
+                  border: '4px solid #FF5429',
+                }}
               >
-                <Sparkles size={18} fill="white" className="text-white flex-shrink-0" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="flex-shrink-0">
+                  <path d="M 10 3 Q 10 12 19 12 Q 10 12 10 21 Q 10 12 1 12 Q 10 12 10 3 Z" />
+                  <path d="M 18 1 Q 18 5 22 5 Q 18 5 18 9 Q 18 5 14 5 Q 18 5 18 1 Z" />
+                </svg>
                 <span>AI Teacher's Toolkit</span>
               </button>
             )}
@@ -171,13 +181,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* ── Bottom: Settings + School Card ── */}
           <div
             className="pt-6 border-t border-gray-100 flex flex-col flex-shrink-0"
-            style={{ marginTop: 'auto' }}
+            style={{ marginTop: 'auto', paddingBottom: collapsed ? '24px' : '0px' }}
           >
             <button
               onClick={() => onSelectNav('settings')}
               style={{
                 paddingLeft: collapsed ? '0px' : '30px',
-                marginBottom: '20px'
+                marginBottom: '16px'
               }}
               className={`w-full flex items-center pr-4 py-3.5 rounded-2xl text-[16px] transition-all cursor-pointer flex-shrink-0 ${collapsed ? 'justify-center pr-0' : ''
                 } ${activeNav === 'settings'
@@ -193,16 +203,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             {/* School Card */}
             {collapsed ? (
-              <div className="flex flex-col items-center gap-2 pt-2 flex-shrink-0">
+              <div className="flex flex-col items-center gap-2.5 pt-1 pb-2 flex-shrink-0">
                 <div className="w-10 h-10 rounded-xl bg-[#F2F7F2] border border-green-100 flex items-center justify-center text-[16px]">
                   🏫
                 </div>
                 <button
                   onClick={onToggleCollapse}
                   title="Expand Sidebar"
-                  className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-colors cursor-pointer mt-2"
+                  className="w-9 h-9 rounded-xl bg-[#F4F4F7] hover:bg-[#EBEBEF] text-[#1A1A1A] flex items-center justify-center transition-colors cursor-pointer mt-1 shadow-2xs border border-black/[0.06]"
                 >
-                  <ChevronRight size={16} strokeWidth={2} />
+                  <ChevronsRight size={18} strokeWidth={2.2} />
                 </button>
               </div>
             ) : (
