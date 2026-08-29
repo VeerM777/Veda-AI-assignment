@@ -39,9 +39,9 @@ export const UploadSection: React.FC<UploadSectionProps> = ({
 
         {/* ── Main Title Heading ── */}
         <div className="text-center space-y-2 w-full px-2">
-          <h1 className="text-[20px] sm:text-[28px] md:text-[36px] lg:text-[40px] font-black text-[#1A1A1A] leading-tight flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 tracking-tight">
-            <span>Upload</span>
-            <span className="inline-block bg-[#FFF0EB] text-[#FF5429] px-4 md:px-7 py-1.5 md:py-2.5 rounded-2xl border border-[#FED3C8] font-black shadow-xs text-center max-w-[95vw] md:max-w-none text-[16px] sm:text-[24px] md:text-[36px] lg:text-[40px]">
+          <h1 style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }} className="text-[20px] sm:text-[28px] md:text-[36px] lg:text-[40px] font-extrabold text-[#1A1A1A] leading-tight flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 tracking-tight">
+            <span style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}>Upload</span>
+            <span style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }} className="inline-block bg-[#FFF0EB] text-[#FF5429] px-4 md:px-7 py-1.5 md:py-2.5 rounded-2xl border border-[#FED3C8] font-extrabold shadow-xs text-center max-w-[95vw] md:max-w-none text-[16px] sm:text-[24px] md:text-[36px] lg:text-[40px]">
               Question Paper &amp; Answer Sheets
             </span>
           </h1>
@@ -206,7 +206,10 @@ const SequentialUploadCard: React.FC<SequentialUploadCardProps> = ({
         overflow: 'hidden',
       }}>
         <div style={{ minWidth: 0, flex: '1 1 0%', overflow: 'hidden' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#1A1A1A', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</h3>
+          <h3 style={{ fontFamily: "'Cabinet Grotesk', sans-serif", fontSize: '17px', fontWeight: 800, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ color: '#1A1A1A' }}>Upload </span>
+            <span style={{ color: '#FF5429' }}>{label}</span>
+          </h3>
           <p style={{ fontSize: '11.5px', fontWeight: 600, color: '#8E8E9A', margin: '2px 0 0 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {hasFiles 
               ? isPDF ? 'PDF Document Attached' : `${filesList.length} Image Page${filesList.length > 1 ? 's' : ''} in Sequence` 
