@@ -331,8 +331,9 @@ RULE 4: PRECISE BOUNDING BOX COORDINATES (0 to 1000 Normalized Scale)
  */
 async function callGeminiWithRetryAndFallback(apiKey: string, contentParts: any[]) {
   const modelsToTry = [
-    'gemini-3.6-flash',
     'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
   ];
 
   let lastError: any = null;

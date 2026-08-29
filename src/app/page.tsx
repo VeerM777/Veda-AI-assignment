@@ -180,44 +180,54 @@ export default function VedaAIApp() {
     setStep('extracting');
     let success = false;
 
-    /** Convert ALL image files to clean JPEG via canvas — handles iOS image/jpg, image/heic, empty types, etc. */
+    /** Convert ALL image files safely to clean JPEG via FileReader + Canvas (handles iOS image/jpg, HEIC, empty types) */
     async function normalizeImageFile(file: File): Promise<File> {
       // PDFs stay as-is
-      if (file.type === 'application/pdf' || file.name?.toLowerCase().endsWith('.pdf')) return file;
+      if (!file || file.type === 'application/pdf' || (file.name || '').toLowerCase().endsWith('.pdf')) {
+        return file;
+      }
 
-      // Convert ALL images through canvas to guarantee clean image/jpeg output
-      return new Promise<File>((resolve) => {
-        const img = new Image();
-        const url = URL.createObjectURL(file);
-        img.onload = () => {
-          try {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.naturalWidth || img.width;
-            canvas.height = img.naturalHeight || img.height;
-            const ctx = canvas.getContext('2d');
-            if (ctx && canvas.width > 0 && canvas.height > 0) {
-              ctx.drawImage(img, 0, 0);
-              canvas.toBlob((blob) => {
-                URL.revokeObjectURL(url);
-                if (blob) {
-                  const baseName = (file.name || 'image').replace(/\.[^.]+$/, '');
-                  resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
-                } else {
-                  resolve(file);
-                }
-              }, 'image/jpeg', 0.92);
-            } else {
-              URL.revokeObjectURL(url);
+      try {
+        // Read file as Data URL using FileReader (100% safe on iOS Safari & Android)
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        });
+
+        // Try converting image to standard JPEG via Canvas
+        return await new Promise<File>((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = img.naturalWidth || img.width || 800;
+              canvas.height = img.naturalHeight || img.height || 600;
+              const ctx = canvas.getContext('2d');
+              if (ctx && canvas.width > 0 && canvas.height > 0) {
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob((blob) => {
+                  if (blob) {
+                    const baseName = (file.name || 'image').replace(/\.[^.]+$/, '');
+                    resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
+                  } else {
+                    resolve(file);
+                  }
+                }, 'image/jpeg', 0.88);
+              } else {
+                resolve(file);
+              }
+            } catch {
               resolve(file);
             }
-          } catch {
-            URL.revokeObjectURL(url);
-            resolve(file);
-          }
-        };
-        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
-        img.src = url;
-      });
+          };
+          img.onerror = () => resolve(file); // Safe fallback to original file if canvas drawing fails
+          img.src = dataUrl;
+        });
+      } catch {
+        return file; // Safe fallback if FileReader fails
+      }
     }
 
     try {
