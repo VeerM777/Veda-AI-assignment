@@ -4,6 +4,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "VedaAI — AI Assessment Extraction & Answer Mapping",
   description: "AI-powered teacher toolkit for extracting questions, mapping student answers, and generating grading feedback.",
+  icons: {
+    icon: "/myvedaai_logo.jpg",
+    shortcut: "/myvedaai_logo.jpg",
+    apple: "/myvedaai_logo.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -12,6 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" type="image/jpeg" href="/myvedaai_logo.jpg" />
+        <link rel="apple-touch-icon" href="/myvedaai_logo.jpg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
