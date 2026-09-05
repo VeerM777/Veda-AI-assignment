@@ -57,3 +57,11 @@ Desktop.ini
 /scratch
 
 .vercel
+
+# Documentation & local workspace files
+.agents/
+.gemini/
+*.pdf
+*.md
+!README.md
+
